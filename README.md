@@ -1,39 +1,39 @@
-# Facial Landmark Detection using Deep Learning
+# Facial Cranium Segmentation using U-Net
 
 ## Overview
-This project focuses on the task of predicting biometry points (landmarks) on facial images using deep learning techniques. Three different deep learning models were explored and evaluated on a dataset of facial images with ground truth landmark coordinates.
+This project focuses on the task of segmenting the cranium region from facial images using deep learning techniques. Three different hypotheses were implemented and evaluated using the U-Net architecture, a popular convolutional neural network for image segmentation tasks.
 
 ## Dataset
-The dataset contained facial images and corresponding ground truth landmark coordinates stored in a CSV file. The data was preprocessed by resizing the images to a consistent size, converting grayscale images to tensors, and normalizing the data. The dataset was split into train, validation, and test sets with a 60-20-20 ratio.
+The dataset consisted of facial images and corresponding binary masks indicating the cranium region. The images were resized to 256x256 pixels, and the masks were converted to grayscale. For the second and third hypotheses, data augmentation techniques such as random horizontal/vertical flips, random rotations, and color jittering were applied to increase the diversity of the training data.
 
 ## Models
 
-### Hypothesis 1: Simple CNN
-- Architecture: Two convolutional layers (32 and 64 filters), followed by max-pooling layers and two fully connected layers (100 and 8 units).
+### Hypothesis 1: Vanilla U-Net
+- Architecture: A standard U-Net architecture with two convolutional layers in the encoder and two convolutional layers in the decoder, along with max-pooling and upsampling layers.
 - Optimizer: Adam with a learning rate of 0.001
-- Loss function: Mean Squared Error (MSE)
+- Loss function: Binary Cross-Entropy Loss
 
-### Hypothesis 2: Deeper CNN with Batch Normalization and Dropout
-- Architecture: Four convolutional layers (64, 128, 256, and 512 filters), batch normalization after each convolutional layer, max-pooling layers, and two fully connected layers (1000 and 8 units) with a dropout layer.
-- Optimizer: Stochastic Gradient Descent (SGD) with a learning rate of 0.0001 and momentum of 0.9
-- Loss function: Mean Squared Error (MSE)
+### Hypothesis 2: U-Net with Data Augmentation and Early Stopping
+- Architecture: Similar to the first hypothesis, but with data augmentation (random horizontal/vertical flips, random rotations, and color jittering) and early stopping (patience of 3 epochs) techniques implemented.
+- Optimizer: Adam with a learning rate of 0.0001
+- Loss function: Binary Cross-Entropy Loss
 
-### Hypothesis 3: ResNet-18 with Transfer Learning
-- Architecture: ResNet-18 pretrained on ImageNet, with the final fully connected layer replaced with custom layers for landmark detection (100 and 8 units).
-- Optimizer: Adam with a learning rate of 0.001
-- Loss function: Mean Squared Error (MSE)
+### Hypothesis 3: U-Net with ResNet-50 Encoder
+- Architecture: A U-Net architecture with a pretrained ResNet-50 model as the encoder. The first convolutional layer of ResNet-50 was modified to accept 3-channel inputs. Custom decoder layers were defined for upsampling and reducing the number of channels.
+- Optimizer: Adam with a learning rate of 0.0001 (ResNet-50 encoder layers were frozen)
+- Loss function: Binary Cross-Entropy Loss
 
 ## Results
-Among the three hypotheses, the second hypothesis (deeper CNN with batch normalization and dropout) achieved the best performance on the test set, with a test loss of 73602.2242. The third hypothesis (ResNet-18 with transfer learning) also performed reasonably well, with a test loss of 104498.4609.
+Among the three hypotheses, the second hypothesis (U-Net with data augmentation and early stopping) achieved the best performance on the validation set, with a validation loss of 0.0420. The third hypothesis (U-Net with ResNet-50 encoder) had a comparable performance, with a validation loss of 0.0422.
 
 ## Future Work
-Potential improvements could include data augmentation techniques, hyperparameter tuning, ensemble methods, attention mechanisms, and exploring more advanced architectures like EfficientNets or Vision Transformers.
+Potential improvements could include hyperparameter tuning, model ensemble techniques, advanced data augmentation techniques, attention mechanisms, and post-processing techniques like conditional random fields (CRFs) or active contour models.
 
 ## Requirements
 - Python
 - PyTorch
 - NumPy
-- Matplotlib
+- OpenCV
 
 ## Setup
 1. Clone the repository
